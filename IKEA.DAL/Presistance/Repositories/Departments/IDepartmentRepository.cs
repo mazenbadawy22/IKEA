@@ -7,9 +7,10 @@ using IKEA.DAL.Models.Departments;
 
 namespace IKEA.DAL.Presistance.Repositories.Departments
 {
-    internal interface IDepartmentRepository
+    public interface IDepartmentRepository
     {
         IEnumerable<Department> GetAll(bool WithAsNoTracking = true);
+        IQueryable<Department> GetAllAsQuarable();
         Department? GetById (int id);
         int Add (Department entity);
         int Update (Department entity);
