@@ -1,0 +1,96 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using IKEA.BLL.Models.Departments;
+using IKEA.DAL.Models.Departments;
+using IKEA.DAL.Presistance.Repositories.Departments;
+using Microsoft.EntityFrameworkCore;
+
+namespace IKEA.BLL.Services
+{
+    public class DepartmentService : IDepartmentService
+    {
+        private readonly IDepartmentRepository _departmentRepository;
+
+        public DepartmentService(IDepartmentRepository departmentRepository)
+        {
+          _departmentRepository = departmentRepository;
+        }
+
+
+        public IEnumerable<DepartmentToReturnDTO> GetAllDepartments()
+        {
+            var departments = _departmentRepository.GetAllAsQuarable().Select(department => new DepartmentToReturnDTO
+            {
+                Id = department.Id,
+                Name = department.Name,
+                Code = department.Code,
+               
+                CreationDate = department.CreationDate,
+            }).AsNoTracking().ToList();
+            return departments;
+        }
+
+        public DepartmentDetailsToReturnDTO? GetDepartmentById(int id)
+        {
+           var department= _departmentRepository.GetById(id);
+            if (department is not null)
+            {
+                return new DepartmentDetailsToReturnDTO
+                {
+                    Id = department.Id,
+                    Name = department.Name,
+                    Code = department.Code,
+                    Description = department.Description,
+                    CreationDate = department.CreationDate,
+                    CreatedBy = department.CreatedBy,
+                    CreatedOn = department.CreatedOn,
+                    LastModifictionBy = department.LastModifictionBy,
+                    LastModifictionOn = department.LastModifictionOn
+                };
+            }
+            return null;
+            
+        }
+        public int CreateDepartment(CreatedDepartmentDTO departmentDTO)
+        {
+            var createddepatment = new Department
+            {
+                Code = departmentDTO.Code,
+                Name = departmentDTO.Name,
+                Description = departmentDTO.Description,
+                CreationDate = departmentDTO.CreationDate,
+                CreatedBy = 1,
+                LastModifictionBy = 1,
+                LastModifictionOn = DateTime.UtcNow,
+                //CreatedOn = DateTime.UtcNow
+            };
+            return _departmentRepository.Add(createddepatment);
+        }
+        public int UpdateDepartment(UpdatedDepartmentDTO departmentDTO)
+        {
+            var updateddepartment = new Department
+            {
+                Id = departmentDTO.Id,
+                Code = departmentDTO.Code,
+                Name = departmentDTO.Name,
+                Description = departmentDTO.Description,
+                CreationDate = departmentDTO.CreationDate,
+                LastModifictionBy =1,
+                LastModifictionOn = DateTime.UtcNow,
+            };
+            return _departmentRepository.Update(updateddepartment);  
+        }
+         public bool DeleteDepartment(int id)
+        {
+            var department = _departmentRepository.GetById(id);
+            if(department is not null)
+            {
+                return _departmentRepository.Delete(department)>0;
+            }
+            return false;
+        }
+    }
+}
