@@ -1,5 +1,6 @@
 ﻿using IKEA.BLL.Models.Departments;
 using IKEA.BLL.Services;
+using IKEA.PL.Models.Departments;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IKEA.PL.Controllers
@@ -10,7 +11,7 @@ namespace IKEA.PL.Controllers
         private readonly ILogger<CreatedDepartmentDTO> _logger;
         private readonly IWebHostEnvironment _environment;
 
-        public DepartmentController(IDepartmentService departmentService,ILogger<CreatedDepartmentDTO> logger,IWebHostEnvironment environment)
+        public DepartmentController(IDepartmentService departmentService, ILogger<CreatedDepartmentDTO> logger, IWebHostEnvironment environment)
         {
             _departmentService = departmentService;
             _logger = logger;
@@ -36,7 +37,7 @@ namespace IKEA.PL.Controllers
         [HttpPost]
         public IActionResult Create(CreatedDepartmentDTO department)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(department);
             }
@@ -51,32 +52,151 @@ namespace IKEA.PL.Controllers
                 else
                 {
                     message = "Department Is Not Created";
-                    ModelState.AddModelError(string.Empty,message );
+                    ModelState.AddModelError(string.Empty, message);
                     return View(department);
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogError(ex,ex.Message);
-                if(_environment.IsDevelopment())
+                _logger.LogError(ex, ex.Message);
+                if (_environment.IsDevelopment())
                 {
-                    message=ex.Message;
+                    message = ex.Message;
                     return View(department);
                 }
                 else
                 {
                     message = "Department Is Not Created";
-                    return View("Error",message);
+                    return View("Error", message);
                 }
             }
-            
+
+
+        }
+        #endregion
+        #endregion
+        #region Details
+        [HttpGet]
+        public IActionResult Details(int? id)
+        {
+            if (id is null)
+            {
+                return BadRequest();
+            }
+            var department = _departmentService.GetDepartmentById(id.Value);
+            if (department is null)
+            {
+                return NotFound();
+            }
+            return View(department);
+        }
+        #endregion
+        #region Edit
+        #region Get
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id is null)
+            {
+                return BadRequest();
+            }
+            var department = _departmentService.GetDepartmentById(id.Value);
+            if (department is null)
+            {
+                return NotFound();
+            }
+            return View(new DepartmentEditViewModel()
+            {
+                Code = department.Code,
+                Name = department.Name,
+                Description = department.Description,
+                CreationDate = department.CreationDate
+            });
+        }
+        #endregion
+        #region Post
+        [HttpPost]
+        public IActionResult Edit([FromRoute] int id, DepartmentEditViewModel departmentVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(departmentVM);
+            }
+            var message = string.Empty;
+            try
+            {
+                var updatedDepartment = new UpdatedDepartmentDTO()
+                {
+                    Id = id, 
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
+
+
+                };
+                var updated = _departmentService.UpdateDepartment(updatedDepartment) > 0;
+                if (updated)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                message = "Sorry , An Error Ocuured While Updating The Department";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                message = _environment.IsDevelopment() ? ex.Message : "Sorry , An Error Ocuured While Updating The Department";
+            }
+            ModelState.AddModelError(string.Empty, message);
+            return View (departmentVM);
+        }
+        #endregion
+        #endregion
+        #region Delete
+        #region Get
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+         if(id is null)
+            {
+                return BadRequest();
+            }
+         var department = _departmentService.GetDepartmentById(id.Value);
+            if (department is null)
+            {
+                return NotFound();
+            }
+            return View(department);
+        }
+        #endregion
+        #region Post
+        [HttpPost]
+        public IActionResult Delete (int id)
+        {
+            var message = string.Empty;
+            var deleted = _departmentService.DeleteDepartment(id);
            
+            try
+            {
+                if (deleted)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                message = "Sorry An Ocuuerd During Deleting The Department";
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex,ex.Message);
+                message=_environment.IsDevelopment()?ex.Message : "Sorry An Ocuuerd During Deleting The Department";
+            }
+            return RedirectToAction (nameof(Index));
         }
         #endregion
         #endregion
 
 
 
+
     }
-}
+    }
