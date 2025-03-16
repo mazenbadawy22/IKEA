@@ -178,10 +178,11 @@ namespace IKEA.PL.Controllers
         public IActionResult Delete (int id)
         {
             var message = string.Empty;
-            var deleted = _departmentService.DeleteDepartment(id);
+            
            
             try
             {
+                var deleted = _departmentService.DeleteDepartment(id);
                 if (deleted)
                 {
                     return RedirectToAction(nameof(Index));
@@ -193,7 +194,8 @@ namespace IKEA.PL.Controllers
                 _logger.LogError(ex,ex.Message);
                 message=_environment.IsDevelopment()?ex.Message : "Sorry An Ocuuerd During Deleting The Department";
             }
-            return RedirectToAction (nameof(Index));
+            // return RedirectToAction (nameof(Index));
+            return RedirectToAction(nameof(Delete), new { id });
         }
         #endregion
         #endregion

@@ -1,9 +1,10 @@
 ﻿@model DepartmentDetailsToReturnDTO
 @{
     ViewData["Title"] = "Delete";
+    ViewBag.Action = "Delete";
 }
 
 <h1>Delete Department</h1>
 <br />
 <br />
-<partial name="Partials/DetailsDeleteDepartmentPartial" />
+<partial name="Partials/DetailsDeleteDepartmentPartial" model="Model" />
