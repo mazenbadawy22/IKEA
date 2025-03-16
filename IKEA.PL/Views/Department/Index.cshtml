@@ -27,8 +27,9 @@
                     <td>@department.Code</td>
                     <td>@department.Name</td>
                     <td>@department.CreationDate</td>
-                    <td>
-                        <a asp-controller="Department" asp-action="Details" asp-route-id="@department.Id" class="btn btn-warning">
+                    <partial name="_ButtonsPartial" model="@department.Id" />
+                   @*  <td> *@
+                      @*   <a asp-controller="Department" asp-action="Details" asp-route-id="@department.Id" class="btn btn-warning">
                             <i class="fas fa-eye"></i>  Details
                         </a>
                     </td>
@@ -42,11 +43,11 @@
                             <i class="fas fa-trash"></i>  Delete
                         </a>
                     </td> *@
-                    <td>
+                   @*  <td>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@modalId">
                             <i class="fas fa-trash"></i> Delete
                         </button>
-                    </td>
+                    </td>  *@
             </tr>
                 <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="exampleModalLabel_@department.Id" aria-hidden="true">
                     <div class="modal-dialog">

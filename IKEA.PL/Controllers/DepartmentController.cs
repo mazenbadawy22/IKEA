@@ -35,6 +35,7 @@ namespace IKEA.PL.Controllers
         #endregion
         #region post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreatedDepartmentDTO department)
         {
             if (!ModelState.IsValid)
@@ -117,6 +118,7 @@ namespace IKEA.PL.Controllers
         #endregion
         #region Post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute] int id, DepartmentEditViewModel departmentVM)
         {
             if (!ModelState.IsValid)
@@ -155,42 +157,45 @@ namespace IKEA.PL.Controllers
         #endregion
         #region Delete
         #region Get
-        [HttpGet]
-        public IActionResult Delete(int? id)
-        {
-         if(id is null)
-            {
-                return BadRequest();
-            }
-         var department = _departmentService.GetDepartmentById(id.Value);
-            if (department is null)
-            {
-                return NotFound();
-            }
-            return View(department);
-        }
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (id is null)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    var department = _departmentService.GetDepartmentById(id.Value);
+        //    if (department is null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(department);
+        //}
         #endregion
         #region Post
         [HttpPost]
-        public IActionResult Delete (int id)
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
         {
             var message = string.Empty;
-            var deleted = _departmentService.DeleteDepartment(id);
-           
+
+
             try
             {
+                var deleted = _departmentService.DeleteDepartment(id);
                 if (deleted)
                 {
                     return RedirectToAction(nameof(Index));
                 }
                 message = "Sorry An Ocuuerd During Deleting The Department";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogError(ex,ex.Message);
-                message=_environment.IsDevelopment()?ex.Message : "Sorry An Ocuuerd During Deleting The Department";
+                _logger.LogError(ex, ex.Message);
+                message = _environment.IsDevelopment() ? ex.Message : "Sorry An Ocuuerd During Deleting The Department";
             }
-            return RedirectToAction (nameof(Index));
+            return RedirectToAction(nameof(Index));
+
         }
         #endregion
         #endregion
@@ -199,4 +204,4 @@ namespace IKEA.PL.Controllers
 
 
     }
-    }
+}
