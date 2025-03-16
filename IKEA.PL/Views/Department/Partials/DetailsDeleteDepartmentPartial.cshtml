@@ -65,15 +65,23 @@
             <a asp-action="Index" class="btn btn-secondary">Back To List</a>
         </div>
     }
-    else if (ViewBag.Action == "Delete")
-    {
-        <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="id" value="@Model.Id" />
-            <button type="submit" class="btn btn-danger" onclick="alert('Delete button clicked!')">Delete</button>
-            <a asp-action="Index" class="btn btn-secondary">Back To List</a>
+   
+    else
+        {
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="mt-4"> 
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-secondary">Back To list</a>
         </form>
+       @*  <form asp-action="Delete" asp-route-id="@Model" method="post" onsubmit="return confirm('Are you sure you want to delete this department?');">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </form> *@
 
-    }
+
+        }
+
+    
 </div>
 

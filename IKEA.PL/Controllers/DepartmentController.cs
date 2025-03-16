@@ -195,9 +195,8 @@ namespace IKEA.PL.Controllers
                 message = _environment.IsDevelopment() ? ex.Message : "Sorry An Ocuuerd During Deleting The Department";
             }
             return RedirectToAction(nameof(Index));
-            
-        }
 
+        }
         #endregion
         #endregion
 

@@ -22,7 +22,7 @@ namespace IKEA.BLL.Services
 
         public IEnumerable<DepartmentToReturnDTO> GetAllDepartments()
         {
-            var departments = _departmentRepository.GetAllAsQuarable().Select(department => new DepartmentToReturnDTO
+            var departments = _departmentRepository.GetAllAsQuarable().Where(X=>!X.IsDeleted).Select(department => new DepartmentToReturnDTO
             {
                 Id = department.Id,
                 Name = department.Name,
