@@ -114,7 +114,7 @@ namespace IKEA.PL.Controllers
             }
             return View(new UpdatedEmployeeDto()
             {
-                 
+                
                 Name = employee.Name,
                 Adress = employee.Address,
                 Email = employee.Email,
@@ -130,32 +130,36 @@ namespace IKEA.PL.Controllers
 
         #endregion
         #region Post
-        [HttpPost]
+        [HttpPost] // POST
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto Employee)
+        public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto employee)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(Employee);
-            }
+            if (!ModelState.IsValid) // Server-Side Validation
+                return View(employee);
+
             var message = string.Empty;
             try
             {
-                var updated = _employeeService.UpdateEmployee(Employee) > 0;
+                var updated = _employeeService.UpdateEmployee(employee) > 0;
                 if (updated)
-                {
                     return RedirectToAction(nameof(Index));
-                }
-                message = "Employee is not updated";
+
+                message = "Employee is not Updated";
             }
             catch (Exception ex)
             {
+                // 1. Log Exception
+                // 2. Set Message
                 _logger.LogError(ex, ex.Message);
-                message = "An error occurred while updating the employee.";
+
+                if (_webHostEnvironment.IsDevelopment())
+                    message = ex.Message;
+                else
+                    message = "The Employee is not Created";
             }
 
             ModelState.AddModelError(string.Empty, message);
-            return View(Employee); 
+            return View(employee);
         }
         #endregion
         #endregion

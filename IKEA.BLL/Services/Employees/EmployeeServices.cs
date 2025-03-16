@@ -84,7 +84,7 @@ namespace IKEA.BLL.Services.Employees
                 Age = employeeDto.Age,
                 Address = employeeDto.Adress,
                 IsActive = employeeDto.IsActive,
-                Salary =(decimal) employeeDto.Salary,
+                Salary =employeeDto.Salary,
                 Email = employeeDto.Email,
                 PhoneNumber = employeeDto.PhoneNumber,
                 HiringDate = employeeDto.HiringDate,

@@ -70,9 +70,10 @@
         <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
             @Html.AntiForgeryToken()
             <input type="hidden" name="id" value="@Model.Id" />
-            <button type="submit" class="btn btn-danger">Delete</button>
+            <button type="submit" class="btn btn-danger" onclick="alert('Delete button clicked!')">Delete</button>
             <a asp-action="Index" class="btn btn-secondary">Back To List</a>
         </form>
+
     }
 </div>
 
