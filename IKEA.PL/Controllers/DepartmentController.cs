@@ -35,6 +35,7 @@ namespace IKEA.PL.Controllers
         #endregion
         #region post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreatedDepartmentDTO department)
         {
             if (!ModelState.IsValid)
@@ -117,6 +118,7 @@ namespace IKEA.PL.Controllers
         #endregion
         #region Post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute] int id, DepartmentEditViewModel departmentVM)
         {
             if (!ModelState.IsValid)
@@ -172,6 +174,7 @@ namespace IKEA.PL.Controllers
         #endregion
         #region Post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete (int id)
         {
             var message = string.Empty;
