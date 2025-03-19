@@ -32,24 +32,24 @@ namespace IKEA.DAL.Presistance.Repositories._Generic
             var T = _dbContext.Set<T>().Find(id);
             return T;
         }
-        public int Add(T entity)
+        public void Add(T entity)
         {
             _dbContext.Set<T>().Add(entity);
-            return _dbContext.SaveChanges();
+            //return _dbContext.SaveChanges();
         }
 
-        public int Update(T entity)
+        public void Update(T entity)
         {
             _dbContext.Set<T>().Update(entity);
-            return _dbContext.SaveChanges();
+            //return _dbContext.SaveChanges();
         }
-        public int Delete(T entity)
+        public void Delete(T entity)
         {
             
             
             entity.IsDeleted = true;
             _dbContext.Set<T>().Update(entity);
-            return _dbContext.SaveChanges();
+           // return _dbContext.SaveChanges();
         }
 
         public IQueryable<T> GetAllAsQuarable()

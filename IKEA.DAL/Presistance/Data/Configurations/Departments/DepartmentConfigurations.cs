@@ -18,6 +18,12 @@ namespace IKEA.DAL.Presistance.Data.Configurations.Departments
             builder.Property(d => d.Code).HasColumnType("varchar(50)").IsRequired();
             builder.Property(D => D.CreatedOn).HasDefaultValueSql("GETUTCDATE()");
             builder.Property(D => D.LastModifictionOn).HasComputedColumnSql("GETDATE()");
+            #region Work Relationship
+            builder.HasMany(D => D.Employees)
+                .WithOne(E => E.Department)
+                .HasForeignKey(E => E.DepartmentId)
+                .OnDelete(DeleteBehavior.SetNull);
+            #endregion
         }
     }
 }

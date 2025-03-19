@@ -1,5 +1,6 @@
 ﻿using IKEA.BLL.Models.Departments;
 using IKEA.BLL.Models.Employess;
+using IKEA.BLL.Services;
 using IKEA.BLL.Services.Employees;
 using IKEA.DAL.Models.Employees;
 using IKEA.PL.Models.Departments;
@@ -14,18 +15,21 @@ namespace IKEA.PL.Controllers
         private readonly IEmployeeService _employeeService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<EmployeeController> _logger;
+        
+
         public EmployeeController(IEmployeeService employeeService,IWebHostEnvironment webHostEnvironment,ILogger<EmployeeController> logger)
         {
             _employeeService = employeeService;
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
+           
         }
         #endregion
         #region Index
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(string search)
         {
-            var employees = _employeeService.GetAllEmployess();
+            var employees = _employeeService.GetEmployess(search);
             return View(employees);
         }
         #endregion
@@ -34,7 +38,8 @@ namespace IKEA.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+           // ViewData["Departments"] = departmentService.GetAllDepartments();
+            return View ();
         }
         #endregion
         #region Post
@@ -112,6 +117,7 @@ namespace IKEA.PL.Controllers
             {
                 return NotFound();
             }
+           // ViewData["Departments"] = departmentService.GetAllDepartments();
             return View(new UpdatedEmployeeDto()
             {
                 
