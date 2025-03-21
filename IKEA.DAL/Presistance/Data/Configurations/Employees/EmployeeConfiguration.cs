@@ -29,6 +29,8 @@ namespace IKEA.DAL.Presistance.Data.Configurations.Employees
                 (employeetype)=>employeetype.ToString(),
                 (employeetype)=>(EmployeeType)Enum.Parse(typeof(EmployeeType),employeetype)
                 );
+           
+
             #endregion
         }
     }

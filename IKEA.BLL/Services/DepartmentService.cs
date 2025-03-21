@@ -6,23 +6,24 @@ using System.Threading.Tasks;
 using IKEA.BLL.Models.Departments;
 using IKEA.DAL.Models.Departments;
 using IKEA.DAL.Presistance.Repositories.Departments;
+using IKEA.DAL.Presistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace IKEA.BLL.Services
 {
     public class DepartmentService : IDepartmentService
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DepartmentService(IDepartmentRepository departmentRepository)
+        public DepartmentService(IUnitOfWork unitOfWork)
         {
-          _departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
         }
 
 
         public IEnumerable<DepartmentToReturnDTO> GetAllDepartments()
         {
-            var departments = _departmentRepository.GetAllAsQuarable().Where(X=>!X.IsDeleted).Select(department => new DepartmentToReturnDTO
+            var departments = _unitOfWork.DepartmentRepository.GetAllAsQuarable().Where(X=>!X.IsDeleted).Select(department => new DepartmentToReturnDTO
             {
                 Id = department.Id,
                 Name = department.Name,
@@ -35,7 +36,7 @@ namespace IKEA.BLL.Services
 
         public DepartmentDetailsToReturnDTO? GetDepartmentById(int id)
         {
-           var department= _departmentRepository.GetById(id);
+           var department= _unitOfWork.DepartmentRepository.GetById(id);
             if (department is not null)
             {
                 return new DepartmentDetailsToReturnDTO
@@ -67,7 +68,8 @@ namespace IKEA.BLL.Services
                 LastModifictionOn = DateTime.UtcNow,
                 //CreatedOn = DateTime.UtcNow
             };
-            return _departmentRepository.Add(createddepatment);
+             _unitOfWork.DepartmentRepository.Add(createddepatment);
+            return _unitOfWork.Complete();
         }
         public int UpdateDepartment(UpdatedDepartmentDTO departmentDTO)
         {
@@ -81,16 +83,18 @@ namespace IKEA.BLL.Services
                 LastModifictionBy =1,
                 LastModifictionOn = DateTime.UtcNow,
             };
-            return _departmentRepository.Update(updateddepartment);  
+             _unitOfWork.DepartmentRepository.Update(updateddepartment);
+            return _unitOfWork.Complete();
         }
          public bool DeleteDepartment(int id)
         {
-            var department = _departmentRepository.GetById(id);
+            var departmentrepo =_unitOfWork.DepartmentRepository;
+            var department = departmentrepo.GetById(id);
             if(department is not null)
             {
-                return _departmentRepository.Delete(department)>0;
+                 departmentrepo.Delete(department);
             }
-            return false;
+            return _unitOfWork.Complete()>0;
         }
     }
 }
