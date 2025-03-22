@@ -6,6 +6,12 @@
 }
 
 <h1>Employee Details</h1>
+<br />
+<div class="row justify-content-center align-items-center" >
+    <div class="col-4">
+        <img src="~/files/images/@Model.Image" class="img-fluid rounded-circle" />
+    </div>
+</div>
 
 <br />
 <br />
@@ -53,6 +59,12 @@
                 <label class="form-label" asp-for="PhoneNumber"></label>
                 <input asp-for="PhoneNumber" class="form-control" readonly />
             </div>
+           @*  <div class="form-group col-6 mb-3">
+                <label asp-for="Department" class="control-label mb-2"></label>
+                <select asp-for="Department" asp-items="@departme" class="form-control">
+                    <option value="@null">Choose...</option>
+                </select>
+            </div> *@
             <div class="form-group col-6 mb-4">
                 <label asp-for="EmployeeType" class="control-label mb-2"></label>
                 <select asp-for="EmployeeType" disabled asp-items="Html.GetEnumSelectList<EmployeeType>()" class="form-control">

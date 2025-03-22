@@ -33,5 +33,6 @@ namespace IKEA.BLL.Models.Employess
         public int LastModifiedBy { get; set; }
         public DateTime LastModifiedOn { get; set; }
         #endregion
+        public string? Image {  get; set; }
     }
 }

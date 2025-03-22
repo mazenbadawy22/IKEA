@@ -1,3 +1,4 @@
+using IKEA.BLL.Common.Services;
 using IKEA.BLL.Services;
 using IKEA.BLL.Services.Employees;
 using IKEA.DAL.Presistance.Data;
@@ -28,6 +29,7 @@ namespace IKEA.PL
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<IEmployeeService,EmployeeServices>();
             builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
+            builder.Services.AddTransient<IAttachmentService, AttachmentService>();
             #endregion
 
 
