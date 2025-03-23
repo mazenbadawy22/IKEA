@@ -1,4 +1,5 @@
-﻿using IKEA.DAL.Models.Identity;
+﻿using IKEA.BLL.Common.Services.EmailSettings;
+using IKEA.DAL.Models.Identity;
 using IKEA.PL.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,23 +10,25 @@ namespace IKEA.PL.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IEmailSettings _emailSettings;
 
-        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager,IEmailSettings emailSettings)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailSettings = emailSettings;
         }
         #region Register
         #region Get
         [HttpGet]
-        public async Task< IActionResult> Singup()
+        public async Task< IActionResult> Signup()
         {
             return View();
         }
         #endregion
         #region Post
         [HttpPost]
-        public async Task< IActionResult> Singup(SignUpViewModel signUpViewModel)
+        public async Task< IActionResult> Signup(SignUpViewModel signUpViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -113,13 +116,81 @@ namespace IKEA.PL.Controllers
         }
         #endregion
         #region Forget Password
-
+        #region Get
+        [HttpGet]
+        public async Task<IActionResult> ForgetPassword()
+        {
+            return View();
+        }
         #endregion
-        #region Send Email
-
+        #region Post
+        [HttpPost]
+        public async Task<IActionResult> SendResetPasswordUrl(ForgetPasswordViewModel forgetPasswordViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var User = await _userManager.FindByEmailAsync(forgetPasswordViewModel.Email);
+                if (User is { })
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(User);
+                    var url = Url.Action("ResetPassword", "Account", new { email = forgetPasswordViewModel.Email,token=token  },Request.Scheme);
+                    // To , Subject , Body
+                    var email = new Email()
+                    {
+                        To = forgetPasswordViewModel.Email,
+                        Subject = "Reset Your Password",
+                        Body = url
+                    };
+                    _emailSettings.SendEmail(email);
+                    return RedirectToAction("CheckYourInbox");
+                }
+                ModelState.AddModelError(string.Empty, "InValid Operation, Pls Try Again");
+            }
+            return View(forgetPasswordViewModel);
+        }
+        #endregion
+        #endregion
+        #region CheckYourInbox
+        [HttpGet]
+        public IActionResult CheckYourInbox()
+        {
+            return View();
+        }
         #endregion
         #region Reset Password
+        #region Get
+        [HttpGet]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            TempData["email"] = email;
+            TempData["token"] = token;
+            return View();
+        }
+        #endregion
+        #region Post
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var email = TempData["email"] as string;
+                var token = TempData["token"] as string;
+                var user = await _userManager.FindByEmailAsync(email);
+                if(user is { })
+                {
+                  var result= await _userManager.ResetPasswordAsync(user, token, resetPasswordViewModel.Password);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(SignIn));
+                    }
 
+                }
+
+            }
+            ModelState.AddModelError(string.Empty,"Unable to reset your password.");
+            return View(resetPasswordViewModel);
+        }
+        #endregion
         #endregion
 
 

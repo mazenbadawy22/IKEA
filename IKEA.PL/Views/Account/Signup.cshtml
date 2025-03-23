@@ -1,12 +1,12 @@
 ﻿@model SignUpViewModel
 @{
-    ViewData["Title"] = "Singup";
+    ViewData["Title"] = "Signup";
     Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
 
 <div class="main-agileinfo">
 	<div class="agileits-top">
-		<form asp-action="Singup" method="post">
+		<form asp-action="Signup" method="post">
 			<input class="text" asp-for="FirstName" placeholder="First Name" required="">
 			<input class="text" asp-for="LastName" placeholder="Last Name" required="">
 			<input class="text" asp-for="UserName" placeholder="Username" required="">

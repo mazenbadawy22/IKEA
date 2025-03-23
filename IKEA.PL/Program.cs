@@ -1,4 +1,5 @@
 using IKEA.BLL.Common.Services;
+using IKEA.BLL.Common.Services.EmailSettings;
 using IKEA.BLL.Services;
 using IKEA.BLL.Services.Employees;
 using IKEA.DAL.Models.Identity;
@@ -32,6 +33,7 @@ namespace IKEA.PL
             builder.Services.AddScoped<IEmployeeService,EmployeeServices>();
             builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
             builder.Services.AddTransient<IAttachmentService, AttachmentService>();
+            builder.Services.AddScoped<IEmailSettings,EmailSettings>();
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>((options =>
             {
                 options.Password.RequiredLength = 5;
@@ -42,12 +44,14 @@ namespace IKEA.PL
                 options.Lockout.MaxFailedAccessAttempts = 5;
 
             }))
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/SignIn";
                 
             });
+
             #endregion
 
 
