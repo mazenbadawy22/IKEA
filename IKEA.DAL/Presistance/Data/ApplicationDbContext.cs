@@ -9,11 +9,12 @@ using System.Reflection;
 using IKEA.DAL.Models.Employees;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using IKEA.DAL.Models.Identity;
 
 namespace IKEA.DAL.Presistance.Data
 {
 
-    public class ApplicationDbContext:IdentityDbContext
+    public class ApplicationDbContext:IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

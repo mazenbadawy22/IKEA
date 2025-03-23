@@ -2,7 +2,7 @@
 
 namespace IKEA.PL.Models.Account
 {
-    public class SingUpViewModel
+    public class SignUpViewModel
     {
         [Display(Name ="First Name")]
         public string FirstName { get; set; } = null!;
