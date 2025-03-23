@@ -171,29 +171,31 @@ namespace IKEA.PL.Controllers
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
         {
+            #region Old
             if (ModelState.IsValid)
             {
                 var email = TempData["email"] as string;
                 var token = TempData["token"] as string;
                 var user = await _userManager.FindByEmailAsync(email);
-                if(user is { })
+                if (user is not null)
                 {
-                  var result= await _userManager.ResetPasswordAsync(user, token, resetPasswordViewModel.Password);
+                    var result = await _userManager.ResetPasswordAsync(user, token, resetPasswordViewModel.Password);
                     if (result.Succeeded)
                     {
                         return RedirectToAction(nameof(SignIn));
                     }
 
                 }
-
             }
-            ModelState.AddModelError(string.Empty,"Unable to reset your password.");
+            ModelState.AddModelError(string.Empty, "Invalid Opration Please TRy Again");
             return View(resetPasswordViewModel);
         }
-        #endregion
-        #endregion
+            #endregion
+
+            #endregion
+            #endregion
 
 
 
+        }
     }
-}
