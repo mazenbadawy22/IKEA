@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace IKEA.BLL.Models.Employess
 {
@@ -21,5 +22,6 @@ namespace IKEA.BLL.Models.Employess
         public string Gender { get; set; } = null!;
         public string EmployeeType { get; set; } = null!;
         public string? Department { get; set; } 
+        public string? Image {  get; set; }
     }
 }

@@ -7,11 +7,14 @@ using IKEA.DAL.Models.Departments;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using IKEA.DAL.Models.Employees;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using IKEA.DAL.Models.Identity;
 
 namespace IKEA.DAL.Presistance.Data
 {
 
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext:IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -24,11 +27,13 @@ namespace IKEA.DAL.Presistance.Data
         //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
         #region DbSet
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        
         #endregion
     }
 }

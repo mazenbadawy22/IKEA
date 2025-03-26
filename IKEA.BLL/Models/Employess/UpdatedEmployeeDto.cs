@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IKEA.DAL.Common.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace IKEA.BLL.Models.Employess
 {
@@ -31,5 +32,6 @@ namespace IKEA.BLL.Models.Employess
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
         public int? DepartmentId { get; set; }
+        public IFormFile? Image {  get; set; }
     }
 }

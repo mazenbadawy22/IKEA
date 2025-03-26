@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +10,9 @@ namespace IKEA.DAL.Presistance.Repositories._Generic
 {
     public interface IGenericRepository<T> where T : ModelBase
     {
-        IEnumerable<T> GetAll(bool WithAsNoTracking = true);
+        Task<IEnumerable<T>> GetAllAsync(bool WithAsNoTracking = true);
         IQueryable<T> GetAllAsQuarable();
-        T? GetById(int id);
+        Task<T?> GetByIdAsync(int id);
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);

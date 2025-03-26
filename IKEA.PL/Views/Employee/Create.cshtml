@@ -4,7 +4,7 @@
 @inject IDepartmentService departmentService
 @{
     ViewData["Title"] = "Employees";
-    var Departments = new SelectList(departmentService.GetAllDepartments(), nameof(DepartmentDetailsToReturnDTO.Id), nameof(DepartmentDetailsToReturnDTO.Name));
+    var Departments = new SelectList(await departmentService.GetAllDepartmentsAsync(), nameof(DepartmentDetailsToReturnDTO.Id), nameof(DepartmentDetailsToReturnDTO.Name));
 
 }
 <div class="row justify-content-center align-items-center flex-column">
@@ -74,6 +74,11 @@
             <label class="form-label" asp-for="HiringDate"></label>
             <input asp-for="HiringDate" type="date" class="form-control mb-3" />
             <span asp-validation-for="HiringDate" class="text-danger"></span>
+        </div>
+        <div class="form-group col-6">
+            <label class="form-label" asp-for="Image"></label>
+            <input asp-for="Image" class="form-control mb-3" />
+           
         </div>
         <div class="form-group col-12 my-2">
             <div class="form-check">

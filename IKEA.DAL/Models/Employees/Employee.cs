@@ -24,6 +24,9 @@ namespace IKEA.DAL.Models.Employees
         public int? DepartmentId { get; set; }
         public virtual Department? Department { get; set; }
         #endregion
+        #region Image
+        public string? Image {  get; set; }
+        #endregion
 
     }
 }
